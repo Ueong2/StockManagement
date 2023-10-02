@@ -8,7 +8,8 @@ public class StkDTO {
 	private String item_code;
 	private String item_name;
 	private String manufacturer;
-	private int avg_price;
+	private int in_avg_price;
+	private int out_avg_price;
 	private int min_stocks;
 	private int cur_stocks;
 	private String item_desc;
@@ -16,17 +17,48 @@ public class StkDTO {
 	public StkDTO() {
 	}
 
-	public StkDTO(String category, String item_code, String item_name, String manufacturer, int avg_price,
+	public StkDTO(String category, String item_code, String item_name, String manufacturer, int in_avg_price, int out_avg_price,
 			int min_stocks, int cur_stocks, String item_desc) {
 		super();
 		this.category = category;
 		this.item_code = item_code;
 		this.item_name = item_name;
 		this.manufacturer = manufacturer;
-		this.avg_price = avg_price;
+		this.in_avg_price = in_avg_price;
+		this.out_avg_price = out_avg_price;
 		this.min_stocks = min_stocks;
 		this.cur_stocks = cur_stocks;
 		this.item_desc = item_desc;
+	}
+
+	
+	
+	public StkDTO(String category, String item_code, String item_name, String manufacturer,
+			int min_stocks, int cur_stocks, String item_desc) {
+		super();
+		this.category = category;
+		this.item_code = item_code;
+		this.item_name = item_name;
+		this.manufacturer = manufacturer;
+		this.min_stocks = min_stocks;
+		this.cur_stocks = cur_stocks;
+		this.item_desc = item_desc;
+	}
+
+	public int getIn_avg_price() {
+		return in_avg_price;
+	}
+
+	public void setIn_avg_price(int in_avg_price) {
+		this.in_avg_price = in_avg_price;
+	}
+
+	public int getOut_avg_price() {
+		return out_avg_price;
+	}
+
+	public void setOut_avg_price(int out_avg_price) {
+		this.out_avg_price = out_avg_price;
 	}
 
 	public String getCategory() {
@@ -61,19 +93,11 @@ public class StkDTO {
 		this.manufacturer = manufacturer;
 	}
 
-	public int getAvg_price() {
-		return avg_price;
-	}
-
-	public void setAvg_price(int avg_price) {
-		this.avg_price = avg_price;
-	}
-
-	public int getMout_stocks() {
+	public int getMin_stocks() {
 		return min_stocks;
 	}
 
-	public void setMout_stocks(int min_stocks) {
+	public void setMin_stocks(int min_stocks) {
 		this.min_stocks = min_stocks;
 	}
 
@@ -93,11 +117,10 @@ public class StkDTO {
 		this.item_desc = item_desc;
 	}
 
-	
-	
 	@Override
 	public int hashCode() {
-		return Objects.hash(avg_price, category, cur_stocks, item_code, item_desc, item_name, manufacturer, min_stocks);
+		return Objects.hash(category, cur_stocks, in_avg_price, item_code, item_desc, item_name, manufacturer,
+				min_stocks, out_avg_price);
 	}
 
 	@Override
@@ -109,19 +132,22 @@ public class StkDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		StkDTO other = (StkDTO) obj;
-		return avg_price == other.avg_price && Objects.equals(category, other.category)
-				&& cur_stocks == other.cur_stocks && Objects.equals(item_code, other.item_code)
+		return Objects.equals(category, other.category) && cur_stocks == other.cur_stocks
+				&& in_avg_price == other.in_avg_price && Objects.equals(item_code, other.item_code)
 				&& Objects.equals(item_desc, other.item_desc) && Objects.equals(item_name, other.item_name)
-				&& Objects.equals(manufacturer, other.manufacturer) && min_stocks == other.min_stocks;
+				&& Objects.equals(manufacturer, other.manufacturer) && min_stocks == other.min_stocks
+				&& out_avg_price == other.out_avg_price;
 	}
 
 	@Override
 	public String toString() {
 		return "StkDTO [category=" + category + ", item_code=" + item_code + ", item_name=" + item_name
-				+ ", manufacturer=" + manufacturer + ", avg_price=" + avg_price + ", min_stocks=" + min_stocks
-				+ ", cur_stocks=" + cur_stocks + ", item_desc=" + item_desc + "]";
+				+ ", manufacturer=" + manufacturer + ", in_avg_price=" + in_avg_price + ", out_avg_price="
+				+ out_avg_price + ", min_stocks=" + min_stocks + ", cur_stocks=" + cur_stocks + ", item_desc="
+				+ item_desc + "]";
 	}
 
 	
+
 	
 }

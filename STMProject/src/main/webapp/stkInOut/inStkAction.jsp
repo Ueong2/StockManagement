@@ -1,19 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import = "stm.func.*, java.util.Date" %>
-<jsp:useBean id="stk" class = "stm.func.InStkDTO" scope="page"/>		
-<jsp:useBean id="inv_in_service" class = "stm.func.InStkDAO" scope="application"/>	<!-- 1. 이 줄로 -->
+<jsp:useBean id="stk" class = "stm.func.InOutStkDTO" scope="page"/>		
+<jsp:useBean id="inservice" class = "stm.func.InOutStkDAO" scope="request"/>	<!-- 1. 이 줄로 -->
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>inStkAction.jsp</title>
 </head>
 <jsp:setProperty property = "*" name = "stk"/>
-<jsp:setProperty property = "stk" name = "inv_in_service" value = "<%= stk %>"/>
+<jsp:setProperty property = "stk" name = "inservice" value = "<%= stk %>"/>
 <%
-	System.out.println("1");
-	int result = inv_in_service.insert(stk);		// 2. 이렇게 간편화 됨
+	int result = inservice.insertin(stk);		// 2. 이렇게 간편화 됨
+	int result2 = inservice.updatein(stk);
 //result 값에 따라 결과 화면을 html로 만들어 출력
 %>
 <body>

@@ -130,22 +130,72 @@ public class StkDAO{
 		return result;
 	}
 	
-//	
-//	public int delete(StkDTO stk) throws SQLException {
-//		Connection conn = pool.getConnection(); 
-//		Statement stmt = conn.createStatement();
-//		String sql = "DELETE FROM PRODUCTS WHERE ID = '"+ stk.getId()+"' "; 
-//		int result = stmt.executeUpdate(sql);
-//		stmt.close();
-//		pool.releaseConnection(conn);
-//		return result;
-//	}
-//	
+
+	
+	public int insert(StkDTO stk) throws SQLException, ClassNotFoundException {
+		Connection conn = pool.getConnection();
+		String sql = "INSERT INTO PRODUCTS(CATEGORY, ITEM_CODE, ITEM_NAME, MANUFACTURER, MIN_STOCKS, CUR_STOCKS, ITEM_DESC, REG_DATE) "
+				+ " VALUES (?, ?, ?, ?, ?, 0, NVL(?,' '), sysdate)";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		System.out.println(sql);
+		stmt.setString(1, stk.getCategory());
+		stmt.setString(2, stk.getItem_code());
+		stmt.setString(3, stk.getItem_name());
+		stmt.setString(4, stk.getManufacturer());
+		stmt.setInt(5, stk.getMin_stocks());
+		stmt.setString(6, stk.getItem_desc());
+		
+		// * 4. execute Update(sql) : insert, delete, update
+		result = stmt.executeUpdate();
+		stmt.close();
+		pool.releaseConnection(conn);
+		return result;
+	}
+	
+	
+	public int delete(String item_code) throws SQLException {
+		Connection conn = pool.getConnection(); 
+		Statement stmt = conn.createStatement();
+		String sql = "DELETE FROM PRODUCTS WHERE ITEM_CODE = '"+ item_code+"' "; 
+		int result = stmt.executeUpdate(sql);
+		stmt.close();
+		pool.releaseConnection(conn);
+		return result;
+	}
+	
 
 	public StkDTO select(StkDTO stk) throws SQLException {
 		Connection conn = pool.getConnection();
 		Statement stmt = conn.createStatement();
-		String sql = "SELECT * FROM PRODUCTS WHERE ITEM_CODE = '" + stk.getItem_code()+"'";
+		String sql = "SELECT  CATEGORY"
+				+ "        ,A.ITEM_CODE ITEM_CODE" 
+				+ "        ,A.ITEM_NAME ITEM_NAME"
+				+ "        ,A.MANUFACTURER MANUFACTURER"
+				+ "        ,ROUND(B.PRICE/B.CNT,2) IN_AVG_PRICE"
+				+ "        ,ROUND(C.PRICE/C.CNT,2) OUT_AVG_PRICE"
+				+ "        ,A.MIN_STOCKS MIN_STOCKS"
+				+ "        ,A.CUR_STOCKS CUR_STOCKS"
+				+ "        ,A.ITEM_DESC ITEM_DESC"
+				+ " FROM    PRODUCTS A"
+				+ " LEFT OUTER JOIN     ("
+				+ "                        SELECT  ITEM_CODE"
+				+ "                                ,SUM(PRICE*AMOUNT) PRICE"
+				+ "                                ,COUNT(*) CNT"		
+				+ "                        FROM    INVENTORY"
+				+ "                        WHERE DIST = '1'"
+				+ "                        GROUP BY ITEM_CODE"
+				+ "                    ) B"
+				+ " ON A.ITEM_CODE = B.ITEM_CODE"
+				+ " LEFT OUTER JOIN     ("
+				+ "                        SELECT  ITEM_CODE"
+				+ "                                ,SUM(PRICE*AMOUNT) PRICE"
+				+ "                                ,COUNT(*) CNT"		
+				+ "                                FROM    INVENTORY"
+				+ "                                WHERE DIST = '2'"
+				+ "                                GROUP BY ITEM_CODE"
+				+ "                    ) C"
+				+ " ON A.ITEM_CODE = C.ITEM_CODE"
+				+ " WHERE   A.ITEM_CODE = '" + stk.getItem_code()+"'";
 		System.out.println("select()::" + sql);
 		System.out.println("Parameter :: " + stk);
 		
@@ -158,7 +208,7 @@ public class StkDAO{
 		System.out.println(result);   // System.out.println(result.next()); result.next()는 두 번 부르면 안 된다.(데이터가 넘어가버림)
 		while (result.next()) {
 			board  = new StkDTO(result.getString("CATEGORY"), result.getString("ITEM_CODE"), result.getString("ITEM_NAME"), result.getString("MANUFACTURER"), 
-					result.getInt("AVG_PRICE"), result.getInt("MIN_STOCKS"), result.getInt("CUR_STOCKS"), result.getString("ITEM_DESC"));
+					result.getInt("IN_AVG_PRICE"), result.getInt("OUT_AVG_PRICE"), result.getInt("MIN_STOCKS"), result.getInt("CUR_STOCKS"), result.getString("ITEM_DESC"));
 		}
 		System.out.println(board);
 		result.close();
@@ -170,7 +220,7 @@ public class StkDAO{
 	public ArrayList<StkDTO> selectAll() throws SQLException {
 		Connection conn = pool.getConnection(); 
 		Statement stmt = conn.createStatement();
-		String sql = "SELECT * FROM PRODUCTS";
+		String sql = "SELECT * FROM PRODUCTS ORDER BY SYSDATE DESC";
 		// * 4. execute (sql)
 		ResultSet result = stmt.executeQuery(sql);
 		//execute : execute(anySQL-callableSQL), executeUpdate(otherSQL), executeQuery(selectSQL) 
@@ -181,7 +231,56 @@ public class StkDAO{
 		
 		while (result.next()) {
 			board  = new StkDTO(result.getString("CATEGORY"), result.getString("ITEM_CODE"), result.getString("ITEM_NAME"), result.getString("MANUFACTURER"), 
-					result.getInt("AVG_PRICE"), result.getInt("MIN_STOCKS"), result.getInt("CUR_STOCKS"), result.getString("ITEM_DESC"));
+				 result.getInt("MIN_STOCKS"), result.getInt("CUR_STOCKS"), result.getString("ITEM_DESC"));
+			boards.add(board);
+		}
+		System.out.println(board);
+		result.close();
+		stmt.close();
+		pool.releaseConnection(conn);
+		return boards;
+	}
+	
+	public ArrayList<StkDTO> selectSearch(String searchText) throws SQLException {
+		Connection conn = pool.getConnection(); 
+		Statement stmt = conn.createStatement();
+		String sql = "SELECT * FROM PRODUCTS WHERE ITEM_NAME LIKE '%" + searchText + "%'";
+		// * 4. execute (sql)
+		ResultSet result = stmt.executeQuery(sql);
+		//execute : execute(anySQL-callableSQL), executeUpdate(otherSQL), executeQuery(selectSQL) 
+		StkDTO board = null;
+		ArrayList<StkDTO> boards = new ArrayList<StkDTO>();
+		// * 5. result ( , int, recordset)
+		// * 6. get data
+		
+		while (result.next()) {
+			board  = new StkDTO(result.getString("CATEGORY"), result.getString("ITEM_CODE"), result.getString("ITEM_NAME"), result.getString("MANUFACTURER"), 
+				 result.getInt("MIN_STOCKS"), result.getInt("CUR_STOCKS"), result.getString("ITEM_DESC"));
+			boards.add(board);
+		}
+		System.out.println("출력확인" +board);
+		result.close();
+		stmt.close();
+		pool.releaseConnection(conn);
+		return boards;
+	}
+	
+	
+	public ArrayList<StkDTO> selectOut() throws SQLException {
+		Connection conn = pool.getConnection(); 
+		Statement stmt = conn.createStatement();
+		String sql = "SELECT * FROM PRODUCTS WHERE CUR_STOCKS <> 0";
+		// * 4. execute (sql)
+		ResultSet result = stmt.executeQuery(sql);
+		//execute : execute(anySQL-callableSQL), executeUpdate(otherSQL), executeQuery(selectSQL) 
+		StkDTO board = null;
+		ArrayList<StkDTO> boards = new ArrayList<StkDTO>();
+		// * 5. result ( , int, recordset)
+		// * 6. get data
+		
+		while (result.next()) {
+			board  = new StkDTO(result.getString("CATEGORY"), result.getString("ITEM_CODE"), result.getString("ITEM_NAME"), result.getString("MANUFACTURER"), 
+					result.getInt("IN_AVG_PRICE"), result.getInt("OUT_AVG_PRICE"), result.getInt("MIN_STOCKS"), result.getInt("CUR_STOCKS"), result.getString("ITEM_DESC"));
 			boards.add(board);
 		}
 		System.out.println(board);

@@ -39,10 +39,11 @@ public class BoardDAO {
 		return board;
 	}
 	
+	
 	public BoardDTO select(int id) throws SQLException {
 		Connection conn = pool.getConnection(); 
 		Statement stmt = conn.createStatement();
-		String sql = "select * from board where id = " + id;
+		String sql = "select * from registers where id = " + id;
 		// * 4. execute (sql)
 		ResultSet result = stmt.executeQuery(sql);
 		//execute : execute(anySQL-callableSQL), executeUpdate(otherSQL), executeQuery(selectSQL) 
@@ -64,7 +65,7 @@ public class BoardDAO {
 		//jdbc 2~ 7단계(connection 반납)
 		Connection conn = pool.getConnection();
 		Statement stmt = conn.createStatement();
-		String sql = "insert into board(id, name, email, pwd, subject, content, regdate, hit, "
+		String sql = "insert into registers(id, name, email, pwd, subject, content, regdate, hit, "
 				+ "parent, sort, tab, originalfile)\r\n" + 
 				"	values( (select NVL(max(id),0)+1 from board), "
 				+ "'"+board.getName()+"',"
@@ -82,7 +83,7 @@ public class BoardDAO {
 	public int update(int id, BoardDTO board) throws SQLException {
 		Connection conn = pool.getConnection(); 
 		Statement stmt = conn.createStatement();
-		String sql = "update board set name="
+		String sql = "update registers set name="
 				+ "'"+board.getName()+"',"
 				+ "email="
 				+ "'"+board.getEmail()+"', "
@@ -95,18 +96,20 @@ public class BoardDAO {
 	public int delete(int id) throws SQLException {
 		Connection conn = pool.getConnection(); 
 		Statement stmt = conn.createStatement();
-		String sql = "delete from board where id ="+id;
+		String sql = "delete from registers where id ="+id;
 		int result = stmt.executeUpdate(sql);
 		stmt.close();
 		pool.releaseConnection(conn);
 		return result;
 	}
 	
+	
+	
 	public ArrayList<BoardDTO> selectAll() throws SQLException {
 
 		Connection conn = pool.getConnection(); 
 		Statement stmt = conn.createStatement();
-		String sql = "select * from board order by regdate";
+		String sql = "select * from registers order by regdate";
 		
 		// * 4. execute (sql)
 		ResultSet result = stmt.executeQuery(sql);
