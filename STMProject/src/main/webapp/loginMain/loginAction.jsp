@@ -1,10 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" errorPage="loginError.html"%>
 <%@ page import="stm.func.*,java.util.Date" %>
 
-<jsp:useBean id="db" class="stm.func.BoardDAO" scope="application"/>
-<jsp:useBean id="board" class="stm.func.BoardDTO" scope="request"/>
-<jsp:setProperty property="*" name="board"/>
+<jsp:useBean id="db" class="stm.func.LoginDAO" scope="application"/>
+<jsp:useBean id="login" class="stm.func.LoginDTO" scope="request"/>
+<jsp:setProperty property="*" name="login"/>
  
 <!DOCTYPE html>
 <html>
@@ -15,10 +14,21 @@
 <body>
 <%
 //2. 웹명령(loginAction)을 실행
-board = db.select(board);  // select(id);
-System.out.println("loginAction.jsp select :: " + board); // 존재하면 해당 login 객체 출력, 존재하지 않으면 null
-session.setAttribute("login", board); // <jsp:useBean .... scope="session"
+	login = db.select(login);  // select(id);
+	System.out.println("loginAction.jsp select :: " + login); // 존재하면 해당 login 객체 출력, 존재하지 않으면 null
+	session.setAttribute("loginset", login); // <jsp:useBean .... scope="session"
+	
+	if (login.getDist().equals("1")){
 %>
-<jsp:forward page="main.jsp"/>
+	<jsp:forward page="main.jsp"/>
+<%
+	}
+	else {
+	%>
+		<jsp:forward page="main2.jsp"/>
+	<% 
+	}
+
+%>
 </body>
 </html>

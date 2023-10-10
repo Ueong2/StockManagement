@@ -1,6 +1,9 @@
 package stm.func;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class StkDTO {
@@ -42,6 +45,17 @@ public class StkDTO {
 		this.manufacturer = manufacturer;
 		this.min_stocks = min_stocks;
 		this.cur_stocks = cur_stocks;
+		this.item_desc = item_desc;
+	}
+	
+	public StkDTO(String category, String item_code, String item_name, String manufacturer,
+			int min_stocks, String item_desc) {
+		super();
+		this.category = category;
+		this.item_code = item_code;
+		this.item_name = item_name;
+		this.manufacturer = manufacturer;
+		this.min_stocks = min_stocks;
 		this.item_desc = item_desc;
 	}
 

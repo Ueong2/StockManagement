@@ -3,32 +3,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>viewOutPopup.jsp</title>
+<meta charset="UTF-8">
+<title>viewOutPopup.jsp</title>
+<link rel="stylesheet" type="text/css" href="styles.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #fff;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-        .header {
-            background-color: #fff;
-            color: #000000;
-            padding: 10px;
-        }
         .table-container {
             display: flex;
-            justify-content: center;
-  			text-align: center;
-            background-color:#fff;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center; /* 테이블 가운데 정렬로 변경 */
+            text-align: center;
+            background-color: #fff;
             border-radius: 5px;
-           	
+            padding: 20px;
         }
         table {
             width: 60%;
             border-collapse: collapse;
+            margin: 0 auto; /* 가운데 정렬을 위한 스타일 추가 */
         }
         th, td {
             border: 1px solid #ccc;
@@ -49,6 +41,21 @@
     </style>
 </head>
 <body>
+<%
+	int itemsPerPage = 10; // 페이지 당 아이템 수 (조절 가능)
+	int totalItems = boards.size();
+	int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
+	
+	int currentPage = 1; // 현재 페이지 기본값 설정
+	
+	String pageParam = request.getParameter("page");
+	if (pageParam != null) {
+	    currentPage = Integer.parseInt(pageParam);
+	}
+	
+	int startIndex = (currentPage - 1) * itemsPerPage;
+	int endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+%>
     <script>
         // JavaScript 코드를 추가합니다.
         window.onload = function() {
@@ -61,6 +68,7 @@
                 // 부모 창의 인풋 박스에 값을 전달합니다.
                 window.opener.document.querySelector('input[name="item_code"]').value = cells[0].textContent;
                 window.opener.document.querySelector('input[name="item_name"]').value = cells[1].textContent;
+                window.opener.document.querySelector('input[name="amount"]').value = cells[2].textContent;
 
                 // 팝업 창을 닫습니다.
                 window.close();
@@ -79,17 +87,16 @@
             </tr>
             			
 			<%  
-			int i = 1;
-			if (boards.size() == 0) {
+				if (boards.size() == 0) {
 			%>
 			<tr>
 			    <td colspan="11" class="no-data">출고 가능한 제품이 없습니다. 재고 현황을 확인하세요.</td>
 			</tr>
             
             <%  
-			}
-                for (Object o : boards) {
-                    StkDTO board = (StkDTO) o;
+		        }
+			    for (int i = startIndex; i < endIndex; i++) {
+			        StkDTO board = (StkDTO) boards.get(i);
                 	if (board.getCur_stocks()!=0){
             %>
             <tr>
@@ -103,6 +110,25 @@
             %>
         </table>
     </div>
+   	<div class="pagination">
+	<ul>
+	    <%
+	    for (int pageNum = 1; pageNum <= totalPages; pageNum++) {
+	        if (pageNum == currentPage) {
+	        %>
+	        	<span><%= pageNum %></span>
+	        <%
+	        } else {
+	        %>
+	        	<a href="outPopupAction.jsp?page=<%= pageNum %>"><%= pageNum %></a>
+	        <%
+	        }
+	        %>
+	    <%
+	    }
+	    %>
+	</ul>
+	</div>
 </body>
 </html>
 

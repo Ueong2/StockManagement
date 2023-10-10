@@ -123,6 +123,11 @@ public class InOutStkDTO {
 		this.made_date = made_date;
 	}
 	
+	 // Define a function to format a number with commas
+    public String formatNumberWithCommas(int number) {
+        return String.format("%,d", number);
+    }
+	
 		// 자신이 원하는 형태로 출력하기 위해 get에서 데이터타입을 다시 String으로 변경
 //	public String getMade_date() {
 //		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);

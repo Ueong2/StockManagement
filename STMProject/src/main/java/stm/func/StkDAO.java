@@ -36,71 +36,6 @@ public class StkDAO{
 		}
 	}
 
-//	public int getInsert() throws SQLException, ClassNotFoundException {
-//		Connection conn = pool.getConnection();
-//		String sql = "insert into products(name, gender, id, regdt, pwd, "
-//				+ "phone, position, eMail, hobby) " + 
-//				"	VALUES (?, ?, ?, sysdate, ?, ?, ?, ?, ?)";
-//		 PreparedStatement stmt = conn.prepareStatement(sql);
-//		
-//		System.out.println(sql);
-//		stmt.setString(1, stk.getName());
-//		stmt.setString(2, stk.getGender());
-//		stmt.setString(3, stk.getId());
-//		stmt.setString(4, stk.getPwd());
-//		stmt.setString(5, stk.getPhone());
-//		stmt.setInt(6, stk.getPosition());
-//		stmt.setString(7, stk.getEmail());
-//		stmt.setString(8, stk.getHobby());
-//		
-//		// * 4. execute Update(sql) : insert, delete, update
-//		result = stmt.executeUpdate();
-//		stmt.close();
-//		pool.releaseConnection(conn);
-//		return result;
-//	}
-//	
-//	public int insert(StkDTO stk) throws SQLException, ClassNotFoundException {
-//		Connection conn = pool.getConnection();
-//		String sql = "insert into products(name, gender, id, regdt, pwd, "
-//				+ "phone, position, eMail, hobby) " + 
-//				"	VALUES (?, ?, ?, sysdate, ?, ?, ?, ?, ?)";
-//		PreparedStatement stmt = conn.prepareStatement(sql);
-//		
-//		System.out.println(sql);
-//		stmt.setString(1, stk.getName());
-//		stmt.setString(2, stk.getGender());
-//		stmt.setString(3, stk.getId());
-//		stmt.setString(4, stk.getPwd());
-//		stmt.setString(5, stk.getPhone());
-//		stmt.setInt(6, stk.getPosition());
-//		stmt.setString(7, stk.getEmail());
-//		stmt.setString(8, stk.getHobby());
-//		
-//		// * 4. execute Update(sql) : insert, delete, update
-//		result = stmt.executeUpdate();
-//		stmt.close();
-//		pool.releaseConnection(conn);
-//		return result;
-//	}
-//	
-//	public int update(StkDTO stk) throws SQLException {
-//		Connection conn = pool.getConnection(); 
-//		Statement stmt = conn.createStatement();
-//		String sql = "UPDATE PRODUCTS SET CATEGORY=" 
-//				+ "'"+stk.getCategory()+"',"
-//				+ " ITEM_CODE="
-//				+ "'"+stk.getItem_code()+"', "
-//				+ " ITEM_NAME="
-//				+ "'"+stk.getItem_name()+"', "
-//				+ " MANUFACTURER="
-//				+ "'"+stk.getManufacturer()+"'"
-//				+ " WHERE ITEM_CODE = '" + stk.getItem_code()+"' ";
-//		result = stmt.executeUpdate(sql);
-//		stmt.close();
-//		pool.releaseConnection(conn);
-//		return result;
-//	}
 	
 	/**
 	 * web request data에 아래와 같은 데이터 필요	
@@ -138,13 +73,20 @@ public class StkDAO{
 				+ " VALUES (?, ?, ?, ?, ?, 0, NVL(?,' '), sysdate)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		System.out.println(sql);
+		System.out.println(stk.getCategory());
+		System.out.println(stk.getItem_code());
+		System.out.println(stk.getItem_name());
+		System.out.println(stk.getManufacturer());
+		System.out.println(stk.getMin_stocks());
+		System.out.println(stk.getItem_desc());
+		
 		stmt.setString(1, stk.getCategory());
 		stmt.setString(2, stk.getItem_code());
 		stmt.setString(3, stk.getItem_name());
 		stmt.setString(4, stk.getManufacturer());
 		stmt.setInt(5, stk.getMin_stocks());
 		stmt.setString(6, stk.getItem_desc());
-		
+
 		// * 4. execute Update(sql) : insert, delete, update
 		result = stmt.executeUpdate();
 		stmt.close();
@@ -180,7 +122,7 @@ public class StkDAO{
 				+ " LEFT OUTER JOIN     ("
 				+ "                        SELECT  ITEM_CODE"
 				+ "                                ,SUM(PRICE*AMOUNT) PRICE"
-				+ "                                ,COUNT(*) CNT"		
+				+ "                                ,SUM(AMOUNT) CNT"		
 				+ "                        FROM    INVENTORY"
 				+ "                        WHERE DIST = '1'"
 				+ "                        GROUP BY ITEM_CODE"
@@ -189,7 +131,7 @@ public class StkDAO{
 				+ " LEFT OUTER JOIN     ("
 				+ "                        SELECT  ITEM_CODE"
 				+ "                                ,SUM(PRICE*AMOUNT) PRICE"
-				+ "                                ,COUNT(*) CNT"		
+				+ "                                ,SUM(AMOUNT) CNT"		
 				+ "                                FROM    INVENTORY"
 				+ "                                WHERE DIST = '2'"
 				+ "                                GROUP BY ITEM_CODE"
@@ -217,10 +159,11 @@ public class StkDAO{
 		return board;
 	}
 	
+	
 	public ArrayList<StkDTO> selectAll() throws SQLException {
 		Connection conn = pool.getConnection(); 
 		Statement stmt = conn.createStatement();
-		String sql = "SELECT * FROM PRODUCTS ORDER BY SYSDATE DESC";
+		String sql = "SELECT * FROM PRODUCTS ORDER BY REG_DATE DESC";
 		// * 4. execute (sql)
 		ResultSet result = stmt.executeQuery(sql);
 		//execute : execute(anySQL-callableSQL), executeUpdate(otherSQL), executeQuery(selectSQL) 
@@ -258,7 +201,7 @@ public class StkDAO{
 				 result.getInt("MIN_STOCKS"), result.getInt("CUR_STOCKS"), result.getString("ITEM_DESC"));
 			boards.add(board);
 		}
-		System.out.println("출력확인" +board);
+		System.out.println("selectSearch():: " +board);
 		result.close();
 		stmt.close();
 		pool.releaseConnection(conn);

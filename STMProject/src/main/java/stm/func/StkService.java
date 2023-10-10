@@ -43,6 +43,8 @@ public class StkService {
 	
 
 	public StkDTO select(StkDTO stk) throws SQLException {
+		System.out.println("StkService::select()\n" + stk);
+		
 		StkDTO result = db.select(stk);
 		return result;
 	}

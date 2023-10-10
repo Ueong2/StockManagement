@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import = "stm.func.*, java.util.Date" %>
-<jsp:useBean id="stk" class = "stm.func.InOutStkDTO" scope="page"/>		
+<jsp:useBean id="stk" class = "stm.func.InOutStkDTO" scope="request"/>	
 <jsp:useBean id="outservice" class = "stm.func.InOutStkDAO" scope="request"/>	<!-- 1. 이 줄로 -->
 <!DOCTYPE html>
 <html>
@@ -15,12 +15,13 @@
 	int result = outservice.insertout(stk);		// 2. 이렇게 간편화 됨
 	int result2 = outservice.updateout(stk);
 //result 값에 따라 결과 화면을 html로 만들어 출력
+
 %>
 <body>
 <%
 	if(result == 1){
 %>
-		[<jsp:getProperty property="item_name" name="stk"/>] 출고 내역이 완료되었습니다.
+		[<jsp:getProperty property="item_name" name="stk"/>] 출고 내역이 등록되었습니다.
 <%
 	}else{
 %>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>registerLogin.html</title>
+    <script type="text/javascript">
+        function checkInput(form) {
+            var result = true;
+            var check = /[^0-9-]/;
+
+            if (!form.id.value)
+                result = false;
+            if (!form.pwd.value)
+                result = false;
+            if (!form.name.value)
+                result = false;
+            if (!form.email.value)
+                result = false;
+            if (!form.phone.value)
+                result = false;
+            if (!form.address.value)
+                result = false;
+            alert(result);
+            return result;
+        }
+
+        function cancelRegistration() {
+            window.location.href = 'loginForm.jsp';
+        }
+    </script>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        table {
+            width: 17%;
+            border-collapse: collapse;
+        }
+        .container h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .container table td {
+            padding: 10px;
+        }
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        .container input[type="text"],
+        .container input[type="password"] {
+            width: 80%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+		<h2>회원 가입</h2>
+        <form name="form1" action="registerLoginAction.jsp" onsubmit="return checkInput(form1);">
+            <table border="1">
+                <tr>
+                    <td>*아이디</td>
+                    <td><input name="id" value="qwer" placeholder="아이디를 입력하세요."></td>
+                </tr>
+                <tr>
+                    <td>*비밀번호</td>
+                    <td><input name="pwd" value="1234" placeholder="비밀번호를 입력하세요."></td>
+                </tr>
+                <tr>
+                    <td>*이름</td>
+                    <td><input name="name" value="아아" placeholder="이름을 입력하세요."></td>
+                </tr>
+                <tr>
+                    <td>*이메일</td>
+                    <td><input name="email" value="wdwd@gmail.com" placeholder="이메일을 입력하세요."></td>
+                </tr>
+                <tr>
+                    <td>*전화번호</td>
+                    <td><input name="phone" value="01012347890" placeholder="전화번호를 입력하세요."></td>
+                </tr>
+                <tr>
+                    <td>*주소</td>
+                    <td><input name="address" value="20230921" placeholder="주소를 입력하세요."></td>
+                </tr>
+            </table>
+            <br>
+            <input type="submit" value="회원가입" name="sub">
+            <input type="button" value="취소" onclick="cancelRegistration()">
+        </form>
+    </div>
+</body>
+</html>

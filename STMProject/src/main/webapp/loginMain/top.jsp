@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
- <jsp:useBean id = "login" type="stm.func.BoardDTO" scope = "session"/>
+ <jsp:useBean id = "loginset" type="stm.func.LoginDTO" scope = "session"/>
  
 <!DOCTYPE html>
 <html>
@@ -26,7 +26,7 @@
         .footer {
             position: absolute;
             bottom: 0px;
-            right: 0px;
+            right: 20px;
         }
     </style>
 </head>
@@ -37,9 +37,10 @@
     <br>
     <br>
     <br>
-    <br>
     <div class="footer">
-    <p><%=login.getName() %>님 반갑습니다.</p>
+    <p>[Admin] <%=loginset.getName() %>님 반갑습니다.
+    <a href="loginForm.jsp" target="main"> 로그아웃</a></p>
+    
     </div>
 </body>
 </html>

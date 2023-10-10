@@ -1,23 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" errorPage="viewInError.jsp"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" errorPage="viewInError.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>viewInStk.jsp</title>
-<style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #fff;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-        .header {
-            background-color: #fff;
-            color: #000000;
-            padding: 10px;
-        }
+<link rel="stylesheet" type="text/css" href="styles.css">
+	<style>
         .table-container {
             display: flex;
             flex-direction: column;
@@ -29,6 +17,7 @@
         table {
             width: 60%;
             border-collapse: collapse;
+            margin: 0 auto; /* 가운데 정렬을 위한 스타일 추가 */
         }
         th, td {
             border: 1px solid #ccc;
@@ -48,6 +37,12 @@
     padding: 5px;
     width: 95%;
     box-sizing: border-box;
+  }
+  
+  input[type="number"] {
+    padding: 5px;
+    width: 95%; /* 너비를 조정하여 셀 안에 맞도록 설정 */
+  	box-sizing: border-box; /* 너비에 padding과 border 포함 */
   }
   
   input[type="date"] {
@@ -71,7 +66,7 @@
   .button-container {
     margin: 20px 0;
   }
-</style>
+	</style>
 </head>
 <body>
     <div class="header">
@@ -80,7 +75,7 @@
 
 <!-- 팝업창 정보 집어넣기 -->
 <script>
-	var jspURL = "inPopup.jsp"; // 여기에 JSP 파일의 경로를 넣으세요.
+	var jspURL = "inPopupAction.jsp"; // 여기에 JSP 파일의 경로를 넣으세요.
 	var windowName = "select"; // 새 창의 이름
 	var windowFeatures = "width=800,height=600,scrollbars=yes"; // 새 창의 속성
 	
@@ -118,8 +113,8 @@
 	        <td><input type="text" name="job_charger"></td>
 	        <td><input type="date" name="inv_date" max="9999-12-31" min="1900-01-01" value="2023-01-01"></td>
 	        <td><input type="date" name="made_date" max="9999-12-31" min="1900-01-01" value="2023-01-01"></td>
-	        <td><input type="text" name="price"></td>
-	        <td><input type="text" name="amount"></td>
+	        <td><input type="number" name="price"></td>
+	        <td><input type="number" name="amount"></td>
 	        <td><input type="text" name="inv_desc"></td>
       	</tr>
     </table>

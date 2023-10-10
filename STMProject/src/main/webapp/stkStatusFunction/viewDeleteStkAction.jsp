@@ -17,15 +17,15 @@
 	StkDAO service = new StkDAO();
 	if (stk.getCur_stocks() != 0){
 		%>
-			<%=item_name%> 제품 정보를 삭제할 수 없습니다. 재고를 확인해주세요.<br>
-			<a href='<%=request.getContextPath()%>/stkStatus/listStk.jsp'>재고 현황</a>
+			<%=item_name%> 재고가 0이 아닌 제품 정보를 삭제할 수 없습니다. 재고를 확인해주세요.<br>
+			<a href='<%=request.getContextPath()%>/stkStatus/listStkAction.jsp'>재고 현황</a>
 		<%
 	}
 	else{
 		int result = service.delete(item_code);
 		%>
 		<%=item_name%> 제품 정보가 삭제되었습니다.<br>
-		<a href='<%=request.getContextPath()%>/stkStatus/listStk.jsp'>재고 현황</a>
+		<a href='<%=request.getContextPath()%>/stkStatus/listStkAction.jsp'>재고 현황</a>
 <%
 	}
 %>

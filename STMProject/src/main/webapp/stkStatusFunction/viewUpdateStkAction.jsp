@@ -18,8 +18,8 @@
 	if(result >= 1){
 %>
 <%=oldItemName%> 제품 정보가 변경되었습니다.<br>
-<a href='<%=request.getContextPath()%>/stkStatus/viewStkAction.jsp?item_code=<jsp:getProperty property="item_code" name="stk"/>'>변경정보</a><br>
-<a href='<%=request.getContextPath()%>/stkStatus/listStk.jsp?item_code=<jsp:getProperty property="item_code" name="stk"/>'>재고현황</a>
+<a href='<%=request.getContextPath()%>/stkStatus/stkAction.jsp?item_code=<jsp:getProperty property="item_code" name="stk"/>'>변경정보</a><br>
+<a href='<%=request.getContextPath()%>/stkStatus/listStkAction.jsp?item_code=<jsp:getProperty property="item_code" name="stk"/>'>재고현황</a>
 <%
 	}else{
 %>

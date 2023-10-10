@@ -3,32 +3,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>viewInPopup.jsp</title>
+<meta charset="UTF-8">
+<title>viewInPopup.jsp</title>
+<link rel="stylesheet" type="text/css" href="styles.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #fff;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-        .header {
-            background-color: #fff;
-            color: #000000;
-            padding: 10px;
-        }
         .table-container {
             display: flex;
-            justify-content: center;
-  			text-align: center;
-            background-color:#fff;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #fff;
             border-radius: 5px;
-           	
         }
         table {
             width: 60%;
             border-collapse: collapse;
+            margin: 0 auto; /* 가운데 정렬을 위한 스타일 추가 */
         }
         th, td {
             border: 1px solid #ccc;
@@ -49,6 +39,21 @@
     </style>
 </head>
 <body>
+<%
+    int itemsPerPage = 10; // 페이지 당 아이템 수 (조절 가능)
+    int totalItems = boards.size();
+    int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
+
+    int currentPage = 1; // 현재 페이지 기본값 설정
+
+    String pageParam = request.getParameter("page");
+    if (pageParam != null) {
+        currentPage = Integer.parseInt(pageParam);
+    }
+
+    int startIndex = (currentPage - 1) * itemsPerPage;
+    int endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+%>
 	<!-- 팝업창 정보 집어넣기 -->
     <script>
         // JavaScript 코드를 추가합니다.
@@ -81,7 +86,6 @@
             
             
             <%  
-                int i = 1;
                 if (boards.size() == 0) {
             %>
             <tr>
@@ -89,8 +93,8 @@
 			</tr>
 			<%
                 }
-                for (Object o : boards) {
-                    StkDTO board = (StkDTO) o;
+			    for (int i = startIndex; i < endIndex; i++) {
+			        StkDTO board = (StkDTO) boards.get(i);
             %>
             <tr>
                 <td><%= board.getItem_code() %></td>
@@ -102,5 +106,24 @@
             %>
         </table>
     </div>
+   	<div class="pagination">
+	<ul>
+	    <%
+	    for (int pageNum = 1; pageNum <= totalPages; pageNum++) {
+	        if (pageNum == currentPage) {
+	        %>
+	        	<span><%= pageNum %></span>
+	        <%
+	        } else {
+	        %>
+	        	<a href="inPopupAction.jsp?page=<%= pageNum %>"><%= pageNum %></a>
+	        <%
+	        }
+	        %>
+	    <%
+	    }
+	    %>
+	</ul>
+	</div>
 </body>
 </html>
