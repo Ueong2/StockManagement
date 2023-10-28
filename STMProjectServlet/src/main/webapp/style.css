@@ -1,0 +1,42 @@
+@import "reset.css";
+
+* {
+    box-sizing: border-box;
+}
+
+header {
+    width: 1000px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-items {
+    display: flex;
+    gap: 20px;
+}
+
+form {
+	margin-top: 20px;
+	width: 500px;
+	height: 60px;
+    margin: 0 auto;
+    position: relative;
+}
+
+
+input{
+	width: inherit;
+	height: inherit;
+	display: block;
+}
+
+.position {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
