@@ -99,8 +99,10 @@
 </table>
 
 <br>
-
+<a href="<%=request.getContextPath()%>/stkStatusFunction/updateStkAction1.jsp?item_code=<%= stk.getItem_code()%>"><input type="button" value="변경"></a>
+<a href="<%=request.getContextPath()%>/stkStatusFunction/deleteStkAction.jsp?item_code=<%= stk.getItem_code()%>&item_name=<%= stk.getItem_name() %>"><input type="button" value="삭제"></a>
 <p style="font-weight: bold; font-size: 24px;"><%=stk.getItem_name() %>의 입출고 내역</p>
+
 <table class="table-container" border="1" style="width: 100%; margin-top: 20px;">
 	<tr>
 		<th>구분</th>

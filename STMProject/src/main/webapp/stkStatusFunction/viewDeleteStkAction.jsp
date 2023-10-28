@@ -17,7 +17,7 @@
 	StkDAO service = new StkDAO();
 	if (stk.getCur_stocks() != 0){
 		%>
-			<%=item_name%> 재고가 0이 아닌 제품 정보를 삭제할 수 없습니다. 재고를 확인해주세요.<br>
+			재고가 0이 아닌 제품 정보를 삭제할 수 없습니다. 재고를 확인해주세요.<br>
 			<a href='<%=request.getContextPath()%>/stkStatus/listStkAction.jsp'>재고 현황</a>
 		<%
 	}
