@@ -1,9 +1,0 @@
-@import "reset.css";
-
-* {
-    box-sizing: border-box;
-}
-
-.flex-container {
-    display: flex;
-}
